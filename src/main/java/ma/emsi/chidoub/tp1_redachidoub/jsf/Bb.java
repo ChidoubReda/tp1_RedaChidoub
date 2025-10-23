@@ -1,4 +1,4 @@
-package ma.emsi.chidoub.tp0_redachidoub.jsf;
+package ma.emsi.chidoub.tp1_redachidoub.jsf;
 
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -20,6 +20,26 @@ import java.util.Locale;
 @Named
 @ViewScoped
 public class Bb implements Serializable {
+
+    // --- Mode Debug ---
+    private boolean debug = false;
+    private String texteRequeteJson;
+    private String texteReponseJson;
+
+    public boolean isDebug() { return debug; }
+    public void setDebug(boolean debug) { this.debug = debug; }
+
+    public String getTexteRequeteJson() { return texteRequeteJson; }
+    public void setTexteRequeteJson(String texteRequeteJson) { this.texteRequeteJson = texteRequeteJson; }
+
+    public String getTexteReponseJson() { return texteReponseJson; }
+    public void setTexteReponseJson(String texteReponseJson) { this.texteReponseJson = texteReponseJson; }
+
+    /** Bouton qui bascule le mode debug (utilisé par le <h:commandButton/> de la page). */
+    public void toggleDebug() {
+        this.setDebug(!isDebug());
+    }
+
 
     /**
      * Rôle "système" que l'on attribuera plus tard à un LLM.

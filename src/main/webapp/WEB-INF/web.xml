@@ -9,7 +9,7 @@
 
     <filter>
         <filter-name>CharsetFilter</filter-name>
-        <filter-class>ma.emsi.chidoub.tp0_redachidoub.jsf.CharsetFilter</filter-class>
+        <filter-class>ma.emsi.chidoub.tp1_redachidoub.jsf.CharsetFilter</filter-class>
     </filter>
 
     <filter-mapping>
