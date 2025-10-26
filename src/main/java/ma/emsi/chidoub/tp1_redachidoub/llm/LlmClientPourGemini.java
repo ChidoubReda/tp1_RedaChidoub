@@ -7,42 +7,44 @@ import jakarta.ws.rs.core.Response;
 
 import java.io.Serializable;
 
+/**
+ * Gère l'interface avec l'API de Gemini.
+ * Son rôle est essentiellement de lancer une requête à chaque nouvelle
+ * question qu'on veut envoyer à l'API.
+ */
 @Dependent
 public class LlmClientPourGemini implements Serializable {
-    // Clé API Gemini (récupérée depuis une variable d'environnement)
+
+    // Clé pour l'API du LLM
     private final String key;
-    // Client REST
-    private final Client clientRest;
-    // Endpoint REST de l’API Gemini
+    // Client REST. Facilite les échanges avec une API REST.
+    private Client clientRest; // Pour pouvoir le fermer
+    // Représente un endpoint de serveur REST
     private final WebTarget target;
 
     public LlmClientPourGemini() {
-        // 1) Récupère la clé API depuis la variable d'environnement GEMINI_KEY
-        String envKey = System.getenv("GEMINI_KEY");
-        if (envKey == null || envKey.isBlank()) {
-            throw new IllegalStateException(
-                    "Variable d'environnement GEMINI_KEY absente ou vide. " +
-                            "Définis GEMINI_KEY avec ta clé API Gemini."
-            );
+        // ✅ 1. Récupère la clé secrète dans les variables d'environnement
+        this.key = System.getenv("GEMINI_KEY");
+        if (this.key == null || this.key.isBlank()) {
+            throw new IllegalStateException("La clé API GEMINI_KEY est introuvable dans les variables d'environnement.");
         }
-        this.key = envKey;
 
-        // 2) Initialise le client JAX-RS
+        // ✅ 2. Client REST
         this.clientRest = ClientBuilder.newClient();
 
-        // 3) Prépare l’endpoint generateContent (Gemini v1beta).
-        //    Le modèle peut être ajusté selon votre consigne (ex: gemini-1.5-pro, gemini-1.5-flash, etc.)
-        this.target = clientRest
-                .target("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent")
-                .queryParam("key", this.key);
+        // ✅ 3. URL REST (endpoint Google Gemini)
+        this.target = clientRest.target(
+                "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=" + key
+        );
     }
 
     /**
-     * Envoie une requête POST JSON à l'API Gemini.
-     * @param requestEntity corps JSON de la requête (MediaType.APPLICATION_JSON_TYPE)
-     * @return la réponse HTTP (corps JSON)
+     * Envoie une requête à l'API de Gemini.
+     *
+     * @param requestEntity le corps de la requête (en JSON).
+     * @return réponse REST de l'API (corps en JSON).
      */
-    public Response envoyerRequete(Entity<String> requestEntity) {
+    public Response envoyerRequete(Entity requestEntity) {
         Invocation.Builder request = target.request(MediaType.APPLICATION_JSON_TYPE);
         return request.post(requestEntity);
     }

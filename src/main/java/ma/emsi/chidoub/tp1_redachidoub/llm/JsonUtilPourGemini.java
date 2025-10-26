@@ -1,4 +1,5 @@
 package ma.emsi.chidoub.tp1_redachidoub.llm;
+
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import jakarta.json.*;
@@ -143,7 +144,7 @@ public class JsonUtilPourGemini implements Serializable {
                 .build();
         // Création de l'objet racine
         JsonObject rootJson = Json.createObjectBuilder()
-                .add("systemInstruction", systemInstruction)
+                .add("system_instruction", systemInstruction)
                 .add("contents", contents)
                 .build();
         this.requeteJson = rootJson;
@@ -214,3 +215,4 @@ public class JsonUtilPourGemini implements Serializable {
     }
 
 }
+
