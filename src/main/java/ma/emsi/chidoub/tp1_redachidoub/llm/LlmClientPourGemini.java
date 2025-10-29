@@ -14,7 +14,6 @@ import java.io.Serializable;
  */
 @Dependent
 public class LlmClientPourGemini implements Serializable {
-
     // Clé pour l'API du LLM
     private final String key;
     // Client REST. Facilite les échanges avec une API REST.
@@ -23,27 +22,23 @@ public class LlmClientPourGemini implements Serializable {
     private final WebTarget target;
 
     public LlmClientPourGemini() {
-        // ✅ 1. Récupère la clé secrète dans les variables d'environnement
-        this.key = System.getenv("GEMINI_KEY");
+        // Récupère la clé secrète pour travailler avec l'API du LLM, mise dans une variable d'environnement
+        // du système d'exploitation.
+
+        this.key = System.getenv("GEMINI_API_KEY");
+
         if (this.key == null || this.key.isBlank()) {
-            throw new IllegalStateException("La clé API GEMINI_KEY est introuvable dans les variables d'environnement.");
+            throw new IllegalStateException("La clé API Gemini n'est pas définie dans la variable d'environnement GEMINI_API_KEY");
         }
 
-        // ✅ 2. Client REST
+        // Client REST pour envoyer des requêtes vers les endpoints de l'API du LLM
         this.clientRest = ClientBuilder.newClient();
-
-        // ✅ 3. URL REST (endpoint Google Gemini)
-        this.target = clientRest.target(
-                "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=" + key
-        );
+        // Endpoint REST pour envoyer la question à l'API.
+        // L'URL à trouver a été utilisé dans la commande curl pour tester la clé secrète.
+        // Elle se trouve aussi dans le support de cours.
+        this.target = clientRest.target("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent")
+                .queryParam("key", this.key);
     }
-
-    /**
-     * Envoie une requête à l'API de Gemini.
-     *
-     * @param requestEntity le corps de la requête (en JSON).
-     * @return réponse REST de l'API (corps en JSON).
-     */
     public Response envoyerRequete(Entity requestEntity) {
         Invocation.Builder request = target.request(MediaType.APPLICATION_JSON_TYPE);
         return request.post(requestEntity);
