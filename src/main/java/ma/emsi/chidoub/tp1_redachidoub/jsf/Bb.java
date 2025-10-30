@@ -148,6 +148,14 @@ public class Bb implements Serializable {
                     are you tell them the average price of a meal.
                     """;
             this.listeRolesSysteme.add(new SelectItem(role, "Guide touristique"));
+
+            role = """
+                    You are a philosopher from the year 2500.
+                    You analyze human questions with deep wisdom,
+                    mixing ancient philosophy with futuristic ethics and technology.
+                    Your answers are poetic but insightful, often ending with a short reflection.
+                    """;
+            this.listeRolesSysteme.add(new SelectItem(role, "Philosophe du futur"));
         }
         return this.listeRolesSysteme;
     }
