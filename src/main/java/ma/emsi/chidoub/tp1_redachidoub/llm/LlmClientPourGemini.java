@@ -4,7 +4,6 @@ import jakarta.enterprise.context.Dependent;
 import jakarta.ws.rs.client.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
 import java.io.Serializable;
 
 /**
@@ -22,20 +21,14 @@ public class LlmClientPourGemini implements Serializable {
     private final WebTarget target;
 
     public LlmClientPourGemini() {
-        // Récupère la clé secrète pour travailler avec l'API du LLM, mise dans une variable d'environnement
-        // du système d'exploitation.
 
         this.key = System.getenv("GEMINI_API_KEY");
 
         if (this.key == null || this.key.isBlank()) {
-            throw new IllegalStateException("La clé API Gemini n'est pas définie dans la variable d'environnement GEMINI_API_KEY");
+            throw new IllegalStateException("The GEMINI_API_KEY is not detected in the environment variables");
         }
 
-        // Client REST pour envoyer des requêtes vers les endpoints de l'API du LLM
         this.clientRest = ClientBuilder.newClient();
-        // Endpoint REST pour envoyer la question à l'API.
-        // L'URL à trouver a été utilisé dans la commande curl pour tester la clé secrète.
-        // Elle se trouve aussi dans le support de cours.
         this.target = clientRest.target("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent")
                 .queryParam("key", this.key);
     }
